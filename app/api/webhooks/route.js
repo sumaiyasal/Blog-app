@@ -1,5 +1,5 @@
 import { createOrUpdateUser, deleteUser } from '@/app/lib/users/user';
-import { clerkClient } from '@clerk/nextjs/server';
+import { clerkClient } from '@clerk/clerk-sdk-node';
 import { verifyWebhook } from '@clerk/nextjs/webhooks';
 import { NextRequest } from 'next/server'
 
