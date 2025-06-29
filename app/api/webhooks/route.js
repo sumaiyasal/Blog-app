@@ -56,49 +56,38 @@ export async function POST(req) {
   console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
   console.log('Webhook body:', body);
 
-if (eventType === 'user.created' || eventType === 'user.updated') {
-  const {
-    id,
-    first_name,
-    last_name,
-    image_url,
-    email_addresses,
-    username,
-  } = evt?.data;
-
-  // ✅ Skip null or empty usernames
-  const safeUsername =
-    typeof username === 'string' && username.trim() !== '' ? username : undefined;
-
-  try {
-    const user = await createOrUpdateUser(
-      id,
-      first_name,
-      last_name,
-      image_url,
-      email_addresses,
-      safeUsername // ✅ use only safe/defined value
-    );
-
-    if (user && eventType === 'user.created') {
-      try {
-        await clerkClient.users.updateUserMetadata(id, {
-          publicMetadata: {
-            userMongoId: user._id,
-            isAdmin: user.isAdmin,
-          },
-        });
-      } catch (error) {
-        console.log('Error updating user metadata:', error);
+  if (eventType === 'user.created' || eventType === 'user.updated') {
+    const { id, first_name, last_name, image_url, email_addresses, username } =
+      evt?.data;
+    try {
+      const user = await createOrUpdateUser(
+        id,
+        first_name,
+        last_name,
+        image_url,
+        email_addresses,
+        
+      );
+      if (user && eventType === 'user.created') {
+        try {
+          await clerkClient.users.updateUserMetadata(id, {
+            publicMetadata: {
+              userMongoId: user._id,
+              isAdmin: user.isAdmin,
+            },
+          });
+        } catch (error) {
+          console.log('Error updating user metadata:', error);
+        }
       }
+    } catch (error) {
+      console.log('Error creating or updating user:', error);
+      return new Response('Error occured', {
+        status: 400,
+      });
     }
-  } catch (error) {
-    console.log('Error creating or updating user:', error);
-    return new Response('Error occurred', {
-      status: 400,
-    });
   }
-}
+
   if (eventType === 'user.deleted') {
     const { id } = evt?.data;
     try {
