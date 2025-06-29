@@ -1,27 +1,40 @@
-import { verifyWebhook } from '@clerk/nextjs/webhooks'
-import { NextRequest } from 'next/server'
+// app/api/webhooks/clerk/route.js
+import { headers } from 'next/headers';
+import { Webhook } from 'svix'; // Clerk uses Svix under the hood
+import { buffer } from 'node:stream/consumers';
+
+// For Clerk signature verification
+const CLERK_WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
 
 export async function POST(req) {
   try {
-    const evt = await verifyWebhook(req)
+    const payload = await req.text(); // raw body
+    const headerPayload = headers();
 
-    // Do something with payload
-    // For this guide, log payload to console
-    const { id } = evt.data
-    const eventType = evt.type
-    console.log(`Received webhook with ID ${id} and event type of ${eventType}`)
-    console.log('Webhook payload:', evt.data)
-    
-if (evt.type === 'user.created') {
-  console.log('userId:', evt.data.id)
-}
-if (evt.type === 'user.updated') {
-  console.log('user is updated', evt.data.id)
-}
+    const svix = new Webhook(CLERK_WEBHOOK_SECRET);
+    const evt = svix.verify(payload, {
+      'svix-id': headerPayload.get('svix-id'),
+      'svix-timestamp': headerPayload.get('svix-timestamp'),
+      'svix-signature': headerPayload.get('svix-signature'),
+    });
 
-    return new Response('Webhook received', { status: 200 })
+    const eventType = evt.type;
+    const eventData = evt.data;
+
+    // 🎯 Handle the event
+    if (eventType === 'user.created') {
+      console.log('👤 New user created:', eventData);
+      // Save user to your DB here (optional)
+    }
+
+    if (eventType === 'user.deleted') {
+      console.log('🗑 User deleted:', eventData.id);
+      // Remove user from your DB (optional)
+    }
+
+    return new Response('Webhook received', { status: 200 });
   } catch (err) {
-    console.error('Error verifying webhook:', err)
-    return new Response('Error verifying webhook', { status: 400 })
+    console.error('❌ Webhook error:', err);
+    return new Response('Webhook error', { status: 400 });
   }
 }
