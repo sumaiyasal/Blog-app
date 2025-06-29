@@ -1,7 +1,7 @@
 import { Webhook } from 'svix';
 import { headers } from 'next/headers';
-import { createOrUpdateUser, deleteUser } from '@/lib/users/user';
 import { clerkClient } from '@clerk/nextjs/server';
+import { createOrUpdateUser, deleteUser } from '@/app/lib/users/user';
 
 export async function POST(req) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the endpoint
