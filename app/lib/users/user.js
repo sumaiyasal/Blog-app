@@ -12,22 +12,30 @@ export const createOrUpdateUser = async (
 ) => {
   try {
     await connect();
+
+    // Prepare the fields to update
+    const updateData = {
+      firstName: first_name,
+      lastName: last_name,
+      profilePicture: image_url,
+      email: email_addresses?.[0]?.email_address || '',
+    };
+
+    // Only set username if it is a valid non-empty string
+    if (typeof username === 'string' && username.trim() !== '') {
+      updateData.username = username.trim();
+    }
+
     const user = await User.findOneAndUpdate(
       { clerkId: id },
-      {
-        $set: {
-          firstName: first_name,
-          lastName: last_name,
-          profilePicture: image_url,
-          email: email_addresses[0].email_address,
-          username,
-        },
-      },
+      { $set: updateData },
       { new: true, upsert: true }
     );
+
     return user;
   } catch (error) {
     console.log('Error creating or updating user:', error);
+    throw error;
   }
 };
 
