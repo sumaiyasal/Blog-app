@@ -66,7 +66,7 @@ export async function POST(req) {
         last_name,
         image_url,
         email_addresses,
-        
+       
       );
       if (user && eventType === 'user.created') {
         try {
