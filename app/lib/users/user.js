@@ -8,7 +8,7 @@ export const createOrUpdateUser = async (
   last_name,
   image_url,
   email_addresses,
-  
+  username
 ) => {
   try {
     await connect();
@@ -20,7 +20,7 @@ export const createOrUpdateUser = async (
           lastName: last_name,
           profilePicture: image_url,
           email: email_addresses[0].email_address,
-          
+          username,
         },
       },
       { new: true, upsert: true }
@@ -30,7 +30,6 @@ export const createOrUpdateUser = async (
     console.log('Error creating or updating user:', error);
   }
 };
-
 
 export const deleteUser = async (id) => {
   try {
