@@ -3,8 +3,6 @@ import { blogApi } from './api/blogApi';
 import { userApi } from './api/userApi';
 
 
-
-
 export const store = configureStore({
   reducer: {
     [blogApi.reducerPath]: blogApi.reducer,
