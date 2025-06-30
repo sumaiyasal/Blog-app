@@ -3,8 +3,8 @@
 import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 import { HiArrowNarrowUp, HiOutlineUserGroup, HiDocumentText } from 'react-icons/hi';
-import { useGetUsersQuery } from '../lib/redux/api/userapi';
 import { useGetPostsQuery } from '../lib/redux/api/blogApi';
+import { useGetUsersQuery } from '../lib/redux/api/userApi';
 
 
 export default function DashboardComp() {

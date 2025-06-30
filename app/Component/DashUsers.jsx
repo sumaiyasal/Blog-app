@@ -2,7 +2,8 @@
 
 import { useUser } from '@clerk/nextjs';
 import { FaCheck, FaTimes } from 'react-icons/fa';
-import { useGetUsersQuery } from '../lib/redux/api/userapi';
+import { useGetUsersQuery } from '../lib/redux/api/userApi';
+
 
 
 export default function DashUsers() {
