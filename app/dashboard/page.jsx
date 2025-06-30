@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import DashSidebar from '../Component/DashSidebar';
 import DashProfile from '../Component/DashProfile';
@@ -22,7 +22,9 @@ export default function Dashboard() {
     <div className='min-h-screen flex flex-col md:flex-row'>
       <div className='md:w-56'>
         {/* Sidebar */}
-        <DashSidebar />
+        <Suspense fallback={<div>Loading dashboard...</div>}><DashSidebar />
+        </Suspense>
+        
       </div>
       {/* profile... */}
       {tab === 'profile' && <DashProfile />}

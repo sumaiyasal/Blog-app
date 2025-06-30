@@ -14,7 +14,7 @@ export default function SearchPage() {
 
   const [posts, setPosts] = useState([]);
   const [showMore, setShowMore] = useState(false);
-  const [ready, setReady] = useState(false); // ✅ wait for formData to sync
+  const [ready, setReady] = useState(false); 
   const [searchPosts] = useSearchPostsMutation();
 
   const searchParams = useSearchParams();

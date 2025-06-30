@@ -11,10 +11,11 @@ export default function AppProviders({ children }) {
   return (
     <ClerkProvider>
       <Provider store={store}>
+        <Suspense fallback={<div>Loading...</div>}>
         <Navbar />
-         <Suspense fallback={<div>Loading...</div>}>
-            {children}
           </Suspense>
+            {children}
+         
         <Footer />
       </Provider>
     </ClerkProvider>
