@@ -1,6 +1,6 @@
 import { Webhook } from 'svix';
 import { headers } from 'next/headers';
-import { clerkClient } from '@clerk/clerk-sdk-node'; // ✅ Correct Clerk SDK
+import { clerkClient } from '@clerk/clerk-sdk-node'; // Correct Clerk SDK
 import { createOrUpdateUser, deleteUser } from '@/app/lib/users/user';
 
 export async function POST(req) {
@@ -33,15 +33,15 @@ export async function POST(req) {
       'svix-signature': svix_signature,
     });
   } catch (err) {
-    console.error('❌ Error verifying webhook:', err);
+    console.error('Error verifying webhook:', err);
     return new Response('Invalid webhook signature', { status: 400 });
   }
 
   const { id } = evt?.data;
   const eventType = evt?.type;
 
-  console.log(`✅ Webhook received: ${eventType} for user ${id}`);
-  console.log('📦 Payload:', evt.data);
+  console.log(`Webhook received: ${eventType} for user ${id}`);
+  console.log('Payload:', evt.data);
 
   // Handle user.created or user.updated
   if (eventType === 'user.created' || eventType === 'user.updated') {
@@ -67,11 +67,11 @@ export async function POST(req) {
             },
           });
         } catch (error) {
-          console.error('❌ Error updating Clerk metadata:', error);
+          console.error('Error updating Clerk metadata:', error);
         }
       }
     } catch (error) {
-      console.error('❌ Error creating/updating user in MongoDB:', error);
+      console.error('Error creating/updating user in MongoDB:', error);
       return new Response('Database error', { status: 400 });
     }
   }
@@ -81,7 +81,7 @@ export async function POST(req) {
     try {
       await deleteUser(id);
     } catch (error) {
-      console.error('❌ Error deleting user:', error);
+      console.error('Error deleting user:', error);
       return new Response('Delete error', { status: 400 });
     }
   }
