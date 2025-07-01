@@ -28,13 +28,13 @@ export const blogApi = createApi({
         body: { slug },
       }),
     }),
-    deletePost: builder.mutation({
-      query: (postId) => ({
-        url: 'delete',
-        method: 'DELETE',
-        body: { id: postId },
-      }),
-    }),
+  deletePost: builder.mutation({
+  query: (postId) => ({
+    url: 'delete',
+    method: 'DELETE',
+    body: { postId }, 
+  }),
+}),
 searchPosts: builder.mutation({
   query: (filters) => {
     const { category, ...rest } = filters;
